@@ -1128,7 +1128,7 @@ function parseSummary(jsonContent) {
 exports.parseSummary = parseSummary;
 /** Extract info from line to text. */
 function lineSummaryToTd(line) {
-    if (!line.pct) {
+    if (line.pct !== 0) {
         return '';
     }
     const { total, covered, pct } = line;
