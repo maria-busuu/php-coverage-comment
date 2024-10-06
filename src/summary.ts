@@ -26,10 +26,6 @@ export function parseSummary(jsonContent: string): Summary | null {
 
 /** Extract info from line to text. */
 function lineSummaryToTd(line: LineSummary): string {
-  if (line.pct === 0) {
-    return ''
-  }
-
   const { total, covered, pct } = line
   return `${pct}% (${covered}/${total})`
 }
