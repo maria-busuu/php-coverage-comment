@@ -185,7 +185,7 @@ const parse_coverage_1 = __nccwpck_require__(715);
 const DEFAULT_COVERAGE = {
     coverage: 0,
     color: 'red',
-    branches: 0,
+    classes: 0,
     functions: 0,
     lines: 0,
     statements: 0,
@@ -205,16 +205,16 @@ function getCoverage(coverageArr) {
     if (!allFilesLine) {
         return DEFAULT_COVERAGE;
     }
-    const { lines, branch, funcs, stmts } = allFilesLine;
+    const { lines, classNum, funcs, stmts } = allFilesLine;
     const color = (0, utils_1.getCoverageColor)(lines);
     const coverage = parseInt(lines.toString());
-    const branches = parseInt(branch.toString());
+    const classes = parseInt(classNum.toString());
     const functions = parseInt(funcs.toString());
     const statements = parseInt(stmts.toString());
     return {
         color,
         coverage,
-        branches,
+        classes,
         functions,
         statements,
         lines: coverage,
@@ -255,22 +255,22 @@ function toTable(coverageArr, options) {
 }
 /** Make html head row - th. */
 function toHeadRow() {
-    return '<tr><th>File</th><th>% Stmts</th><th>% Branch</th><th>% Funcs</th><th>% Lines</th><th>Uncovered Line #s</th></tr>';
+    return '<tr><th>File</th><th>% Stmts</th><th>% Classes</th><th>% Funcs</th><th>% Lines</th><th>Uncovered Line #s</th></tr>';
 }
 /** Make html row - tr. */
 function toRow(line, indent = false, options) {
-    const { stmts, branch, funcs, lines } = line;
+    const { stmts, classNum, funcs, lines } = line;
     const fileName = toFileNameTd(line, indent, options);
     const missing = toMissingTd(line, options);
-    return `<tr><td>${(0, parse_coverage_1.isFolder)(line) ? line.file : fileName}</td><td>${stmts}</td><td>${branch}</td><td>${funcs}</td><td>${lines}</td><td>${missing}</td></tr>`;
+    return `<tr><td>${(0, parse_coverage_1.isFolder)(line) ? line.file : fileName}</td><td>${stmts}</td><td>${classNum}</td><td>${funcs}</td><td>${lines}</td><td>${missing}</td></tr>`;
 }
 /** Make summary row - tr. */
 function toTotalRow(line) {
     if (!line) {
         return '&nbsp;';
     }
-    const { file, stmts, branch, funcs, lines } = line;
-    return `<tr><td><b>${file}</b></td><td><b>${stmts}</b></td><td><b>${branch}</b></td><td><b>${funcs}</b></td><td><b>${lines}</b></td><td>&nbsp;</td></tr>`;
+    const { file, stmts, classNum, funcs, lines } = line;
+    return `<tr><td><b>${file}</b></td><td><b>${stmts}</b></td><td><b>${classNum}</b></td><td><b>${funcs}</b></td><td><b>${lines}</b></td><td>&nbsp;</td></tr>`;
 }
 /** Make fileName cell - td. */
 function toFileNameTd(line, indent = false, options) {
@@ -637,20 +637,20 @@ async function main() {
         }
         if (options.coverageFile) {
             const coverageReport = (0, coverage_1.getCoverageReport)(options);
-            const { coverageHtml, coverage: reportCoverage, color: coverageColor, branches, functions, lines, statements, } = coverageReport;
+            const { coverageHtml, coverage: reportCoverage, color: coverageColor, classes, functions, lines, statements, } = coverageReport;
             finalHtml += coverageHtml ? `\n\n${coverageHtml}` : '';
             if (lines || coverageHtml) {
                 core.startGroup(options.coverageTitle || 'Coverage');
                 core.info(`coverage: ${reportCoverage}`);
                 core.info(`color: ${coverageColor}`);
-                core.info(`branches: ${branches}`);
+                core.info(`classes: ${classes}`);
                 core.info(`functions: ${functions}`);
                 core.info(`lines: ${lines}`);
                 core.info(`statements: ${statements}`);
                 core.info(`coverageHtml: ${coverageHtml}`);
                 core.setOutput('coverage', reportCoverage);
                 core.setOutput('color', coverageColor);
-                core.setOutput('branches', branches);
+                core.setOutput('classes', classes);
                 core.setOutput('functions', functions);
                 core.setOutput('lines', lines);
                 core.setOutput('statements', statements);
@@ -996,7 +996,7 @@ function arrToLine(arr) {
     return {
         file: arr[0],
         stmts: Number(arr[1]),
-        branch: Number(arr[2]),
+        classNum: Number(arr[2]),
         funcs: Number(arr[3]),
         lines: Number(arr[4]),
         uncoveredLines: arr[5].length ? arr[5].split(',') : null,
@@ -1137,15 +1137,15 @@ function lineSummaryToTd(line) {
 /** Convert summary to md. */
 function summaryToMarkdown(summary, options, withoutHeader = false) {
     const { repository, commit, badgeTitle, serverUrl = 'https://github.com', summaryTitle, } = options;
-    const { statements, functions, branches } = summary;
+    const { statements, functions, classes } = summary;
     const { color, coverage } = getCoverage(summary);
     const readmeHref = `${serverUrl}/${repository}/blob/${commit}/README.md`;
     const badge = `<a href="${readmeHref}"><img alt="${badgeTitle}: ${coverage}%" src="https://img.shields.io/badge/${badgeTitle}-${coverage}%25-${color}.svg" /></a><br/>`;
-    const tableHeader = '| Lines | Statements | Branches | Functions |\n' +
+    const tableHeader = '| Lines | Statements | Classes | Functions |\n' +
         '| --- | --- | --- | --- |';
     const tableBody = `| ${badge} |` +
         ` ${lineSummaryToTd(statements)} |` +
-        ` ${lineSummaryToTd(branches)} |` +
+        ` ${lineSummaryToTd(classes)} |` +
         ` ${lineSummaryToTd(functions)} |`;
     const table = `${tableHeader}\n${tableBody}\n`;
     if (withoutHeader) {

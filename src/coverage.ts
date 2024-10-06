@@ -6,7 +6,7 @@ import { parseCoverage, getTotalLine, isFile, isFolder } from './parse-coverage'
 const DEFAULT_COVERAGE: Omit<CoverageReport, 'coverageHtml'> = {
   coverage: 0,
   color: 'red',
-  branches: 0,
+  classes: 0,
   functions: 0,
   lines: 0,
   statements: 0,
@@ -37,17 +37,17 @@ function getCoverage(
     return DEFAULT_COVERAGE
   }
 
-  const { lines, branch, funcs, stmts } = allFilesLine
+  const { lines, classNum, funcs, stmts } = allFilesLine
   const color = getCoverageColor(lines)
   const coverage = parseInt(lines.toString())
-  const branches = parseInt(branch.toString())
+  const classes = parseInt(classNum.toString())
   const functions = parseInt(funcs.toString())
   const statements = parseInt(stmts.toString())
 
   return {
     color,
     coverage,
-    branches,
+    classes,
     functions,
     statements,
     lines: coverage,
@@ -98,19 +98,19 @@ function toTable(coverageArr: CoverageLine[], options: Options): string {
 
 /** Make html head row - th. */
 function toHeadRow(): string {
-  return '<tr><th>File</th><th>% Stmts</th><th>% Branch</th><th>% Funcs</th><th>% Lines</th><th>Uncovered Line #s</th></tr>'
+  return '<tr><th>File</th><th>% Stmts</th><th>% Classes</th><th>% Funcs</th><th>% Lines</th><th>Uncovered Line #s</th></tr>'
 }
 
 /** Make html row - tr. */
 function toRow(line: CoverageLine, indent = false, options: Options): string {
-  const { stmts, branch, funcs, lines } = line
+  const { stmts, classNum, funcs, lines } = line
 
   const fileName = toFileNameTd(line, indent, options)
   const missing = toMissingTd(line, options)
 
   return `<tr><td>${
     isFolder(line) ? line.file : fileName
-  }</td><td>${stmts}</td><td>${branch}</td><td>${funcs}</td><td>${lines}</td><td>${missing}</td></tr>`
+  }</td><td>${stmts}</td><td>${classNum}</td><td>${funcs}</td><td>${lines}</td><td>${missing}</td></tr>`
 }
 
 /** Make summary row - tr. */
@@ -119,8 +119,8 @@ function toTotalRow(line: CoverageLine | undefined): string {
     return '&nbsp;'
   }
 
-  const { file, stmts, branch, funcs, lines } = line
-  return `<tr><td><b>${file}</b></td><td><b>${stmts}</b></td><td><b>${branch}</b></td><td><b>${funcs}</b></td><td><b>${lines}</b></td><td>&nbsp;</td></tr>`
+  const { file, stmts, classNum, funcs, lines } = line
+  return `<tr><td><b>${file}</b></td><td><b>${stmts}</b></td><td><b>${classNum}</b></td><td><b>${funcs}</b></td><td><b>${lines}</b></td><td>&nbsp;</td></tr>`
 }
 
 /** Make fileName cell - td. */

@@ -47,7 +47,7 @@ export interface Summary {
   lines: LineSummary
   statements: LineSummary
   functions: LineSummary
-  branches: LineSummary
+  classes: LineSummary
   branchesTrue: LineSummary
 }
 
@@ -79,7 +79,7 @@ export interface JunitReport extends Junit {
 export interface CoverageLine {
   file: string
   stmts: number
-  branch: number
+  classNum: number
   funcs: number
   lines: number
   uncoveredLines: string[] | null
@@ -89,7 +89,7 @@ export interface CoverageReport {
   coverageHtml: string
   coverage: number
   color: CoverageColor
-  branches: number
+  classes: number
   functions: number
   lines: number
   statements: number

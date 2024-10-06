@@ -169,7 +169,7 @@ async function main(): Promise<void> {
         coverageHtml,
         coverage: reportCoverage,
         color: coverageColor,
-        branches,
+        classes,
         functions,
         lines,
         statements,
@@ -180,7 +180,7 @@ async function main(): Promise<void> {
         core.startGroup(options.coverageTitle || 'Coverage')
         core.info(`coverage: ${reportCoverage}`)
         core.info(`color: ${coverageColor}`)
-        core.info(`branches: ${branches}`)
+        core.info(`classes: ${classes}`)
         core.info(`functions: ${functions}`)
         core.info(`lines: ${lines}`)
         core.info(`statements: ${statements}`)
@@ -188,7 +188,7 @@ async function main(): Promise<void> {
 
         core.setOutput('coverage', reportCoverage)
         core.setOutput('color', coverageColor)
-        core.setOutput('branches', branches)
+        core.setOutput('classes', classes)
         core.setOutput('functions', functions)
         core.setOutput('lines', lines)
         core.setOutput('statements', statements)

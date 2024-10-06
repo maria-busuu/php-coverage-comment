@@ -10,7 +10,7 @@ function arrToLine(arr: string[]): CoverageLine {
   return {
     file: arr[0],
     stmts: Number(arr[1]),
-    branch: Number(arr[2]),
+    classNum: Number(arr[2]),
     funcs: Number(arr[3]),
     lines: Number(arr[4]),
     uncoveredLines: arr[5].length ? arr[5].split(',') : null,
