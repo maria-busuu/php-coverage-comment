@@ -870,7 +870,7 @@ function getMultipleReport(options) {
             return null;
         }
         let atLeastOneFileExists = false;
-        let table = '| Title | Lines | Statements | Branches | Functions |\n' +
+        let table = '| Title | Lines | Statements | Classes | Functions |\n' +
             '| --- | --- | --- | --- | --- |\n';
         for (const titleFileLine of lineReports) {
             const { title, file } = titleFileLine;

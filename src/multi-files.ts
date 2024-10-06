@@ -22,7 +22,7 @@ export function getMultipleReport(options: Options): string | null {
 
     let atLeastOneFileExists = false
     let table =
-      '| Title | Lines | Statements | Branches | Functions |\n' +
+      '| Title | Lines | Statements | Classes | Functions |\n' +
       '| --- | --- | --- | --- | --- |\n'
 
     for (const titleFileLine of lineReports) {
