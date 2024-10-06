@@ -26,7 +26,7 @@ export function parseSummary(jsonContent: string): Summary | null {
 
 /** Extract info from line to text. */
 function lineSummaryToTd(line: LineSummary): string {
-  if (!line.pct) {
+  if (line.pct !== 0) {
     return ''
   }
 
